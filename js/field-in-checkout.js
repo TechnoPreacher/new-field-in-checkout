@@ -1,45 +1,36 @@
-let functionAjax = function () {
+jQuery(function () {
+   // моё поле в чекауте
+    let html = ' <div class="woocommerce-additional-fields__field-wrapper">\n' +
+        '    <p class="form-row notes" id="order_comments_field2" data-priority="">\n' +
+        '        <label for="order_comments2" class="">\n' +
+        '            Примечание к заказу&nbsp;\n' +
+        '            <span class="optional">(необязательно)</span>\n' +
+        '        </label>\n' +
+        '        <span class="woocommerce-input-wrapper">\n' +
+        '            <textarea name="order_comments2" class="input-text " id="order_comments2" placeholder="Примечания к вашему заказу, например, особые пожелания отделу доставки." rows="2" cols="5"></textarea>\n' +
+        '        </span>\n' +
+        '    </p>\n' +
+        '</div>';
+    let elPosts = jQuery('.form-row.notes');//нахожу базовое поле с комментарием
+elPosts.after(html);//добавляю под него своё
+    jQuery('#order_comments_field2').css('border', '5px solid red');
 
-    jQuery.ajax({
-        type: 'POST',
-        url: window.ajax_filter_plugin.ajax_url,//тащу
+    //инфа из моего поля в финальном чекауте
+   // class="woocommerce-table woocommerce-table--order-details shop_table order_details"
+    let html2 =    '<tr> <th id="custom">днище:</th> <td id="custom2">qa</td> </tr>';
 
-        data: {
-            action: 'filter_plugin',// должно совпадать с add_action( 'wp_ajax_filter_plugin', 'ajax_filter_posts_query' ) !!!!
-            title: jQuery('#title').val(),
-            fromdate: jQuery('#fromdate').val(),
-            number: jQuery('#number').val()
-        },
+  //  let html2 ='<p>SSSS</p>';
+let x = jQuery('.woocommerce-table.woocommerce-table--order-details.shop_table.order_details tr');
+    x.last().after(html2);
 
-        success: function (response) {
-            let html = '';
-            jQuery.each(response.data, function (i, item) {
-                html += '<a class="wp-block-latest-posts__post-title"  href="' + item.link + '">' +
-                    item.title + '<br>';
-            });
-            let elPosts = jQuery('.wp-block-latest-posts__list.wp-block-latest-posts');
-            elPosts.html(html);
-            elPosts.css('border', '2px dashed green');
-        }
-    });
-};
+    //jQuery('.woocommerce-table.woocommerce-table--order-details.shop_table.order_details tr th').css('border', '5px solid red');
 
-jQuery(function() {//надо для  первой фильтрации при открытии страницы и с подхватом значения из виджета!
-    //jQuery(window).load(functionAjax()) - а так даст пустоту!
-    functionAjax();
+
+    jQuery('#custom , #custom2').css('border', '2px dotted blue');
+
 });
 
-jQuery(function ($) {
-    //множественный селектор и множественные события привязываются к одному хэндлеру!
-    $('#title,#fromdate,#number').on('keypress change', function (event) {
-        //такая конструкция нужна чтоб в текстовых инпутах слать аякс только по слову/энтеру
-        if ((this.id === 'title') || (this.id === 'number')) {
-            if ((event.which === 32) || (event.which === 13)) {
-                event.preventDefault();//отменяю ввод пробела для инпутов текста
-                functionAjax();//запрашиваю фнукцию
-            }
-        } else {
-            functionAjax();//сразу запрашиваю функкцию при изменении даты
-        }
-    });
-});
+
+
+
+
